@@ -1,33 +1,10 @@
 
 const path = require('path');
-const glob = require('./build/getsass');
+
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
-class ConsoleLogOnBuildWebpackPlugin {
-    apply(compiler) {
-        compiler.hooks.run.tap('matts', compilation => {
-            console.log('The webpack build process is starting!!!');
-        });
-        compiler.hooks.emit.tap('matts', c => {
-            console.log('emiiting')
-        })
-        compiler.hooks.normalModuleFactory.tap('matts', factory => {
-            factory.hooks.parser.for('javascript/auto').tap('MyPlugin', (parser, options) => {
-                console.log('in here')
-                //parser.hooks.someHook.tap(/* ... */);
-            });
-        });
-
-    }
-}
-
+const ConsoleLogOnBuildWebpackPlugin = require('./build/customplugin')
 
 module.exports = async () => {
-
-
-    //    var files = await glob('src');
-
-    //console.log(files)
     return {
         mode: 'development',
         entry: {
@@ -75,7 +52,7 @@ module.exports = async () => {
                         {
                             loader: MiniCssExtractPlugin.loader
                         },
-                        './loader.js',
+                        './build/loader.js',
                         'css-loader',
                         'sass-loader'
                     ]
