@@ -1,12 +1,34 @@
 
 const path = require('path');
+const glob = require('glob');
+const fs = require('fs-extra');
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ConsoleLogOnBuildWebpackPlugin = require('./build/customplugin')
+var sass = require('node-sass');
+const CleanWebpackPlugin = require('clean-webpack-plugin')
+const ExtraWatchWebpackPlugin = require('extra-watch-webpack-plugin');
+const filewatcherPlugin = require("filewatcher-webpack-plugin");
+
+glob('src/**/*.test.scss', async (err, result) => {
+    if (err) {
+        console.log('Error', err);
+    } else {
+        sass.render({
+            file: './dist/app.test.scss',
+            outFile: 'app.test.css'
+        }, function (err, result) {
+
+            //fs.writeFile('./dist/app.test.css', result)
+        });
+
+    }
+});
 
 module.exports = async () => {
     return {
         mode: 'development',
+        watch: true,
         entry: {
             app: ["./src/index.js"]
         },
@@ -14,6 +36,11 @@ module.exports = async () => {
             filename: '[name].bundle.js'
         },
         plugins: [
+            new CleanWebpackPlugin(),
+            new filewatcherPlugin({ watchFileRegex: ['../styles/**/*.scss'] }),
+            new ExtraWatchWebpackPlugin({
+                files: 'src/**/main.test.scss'
+            }),
             new ConsoleLogOnBuildWebpackPlugin(),
             new MiniCssExtractPlugin({
                 // Options similar to the same options in webpackOptions.output

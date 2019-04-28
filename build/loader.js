@@ -1,6 +1,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 const glob = require('glob');
+const sass = require('node-sass');
 
 const extractTheme = async function (source) {
     const callback = this.async();
@@ -15,9 +16,15 @@ const extractTheme = async function (source) {
             var themeFile = files[0];
             const newFile = `./dist/app.${themeFile.split('.')[1]}.scss`;
             await fs.ensureFile(newFile);
-            var contents = await fs.readFile(themeFile, 'utf8');
-            await fs.appendFile(newFile, contents);
-            callback(null, source);
+            //var contents = await fs.readFile(themeFile, 'utf8');
+            sass.render({
+                file: themeFile
+            }, async (err, result) => {
+                await fs.appendFile(newFile, result.css);
+                callback(null, source);
+            })
+
+
         }
         else {
             callback(null, source);
