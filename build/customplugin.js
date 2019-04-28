@@ -1,12 +1,23 @@
 const glob = require('glob');
 const { resolve } = require('path');
+const fs = require('fs-extra');
 class ConsoleLogOnBuildWebpackPlugin {
     apply(compiler) {
+        compiler.hooks.watchRun.tap('matts', (c) => {
+            console.log('watching', c)
+        })
         compiler.hooks.afterCompile.tap('matts', compilation => {
             glob('src/**/*.*.scss', null, async (err, files) => {
-                files.forEach((f) => {
+                files.forEach(async (f) => {
                     //console.log('adding file', f);
-                    //compilation.fileDependencies.add(resolve(f));
+                    //console.log(f.replace('.test', ''))
+                    //const mainStlye = f.replace('.test', '');
+                    //var contents = await fs.readFile('./' + mainStlye, 'utf8');
+                    //console.log('got cont', contents);
+                    //fs.remove(mainStlye)
+                    //fs.writeFile(mainStlye, contents);
+                    compilation.fileDependencies.add(resolve(f));
+
                 });
 
             });

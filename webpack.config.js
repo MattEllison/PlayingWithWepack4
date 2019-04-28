@@ -37,10 +37,8 @@ module.exports = async () => {
         },
         plugins: [
             new CleanWebpackPlugin(),
-            new filewatcherPlugin({ watchFileRegex: ['../styles/**/*.scss'] }),
-            new ExtraWatchWebpackPlugin({
-                files: 'src/**/main.test.scss'
-            }),
+
+
             new ConsoleLogOnBuildWebpackPlugin(),
             new MiniCssExtractPlugin({
                 // Options similar to the same options in webpackOptions.output

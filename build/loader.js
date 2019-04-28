@@ -9,7 +9,7 @@ const extractTheme = async function (source) {
     const thisDirectory = path.dirname(thisFile);
     const thisFileName = path.basename(thisFile);
     const f = thisFileName.split('.')
-
+    console.log('my loader')
     const themeFilePattern = `${thisDirectory}/${f[0]}.*.${f[1]}`
     glob(themeFilePattern, null, async (err, files) => {
         if (files.length > 0) {
